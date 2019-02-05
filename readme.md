@@ -14,7 +14,7 @@
   - [ ] bool_parser
 - [ ] go-internal
   - [ ] calculator
-  - [ ] bool_parser
+  - [x] [bool_parser](go-internal/bool_parser)
 - [ ] go-peg
   - [ ] calculator
   - [ ] bool_parser
@@ -35,7 +35,7 @@
   - [ ] bool_parser
 - [ ] pest
   - [ ] calculator
-  - [x] [bool_parser](./pest/bool_parser)
+  - [x] [bool_parser](pest/bool_parser)
 - [ ] syn
   - [ ] calculator
   - [ ] bool_parser
