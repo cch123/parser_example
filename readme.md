@@ -31,7 +31,7 @@
   - [ ] calculator
   - [ ] bool_parser
 - [ ] nom
-  - [ ] calculator
+  - [x] [calculator](nom/calculator)
   - [ ] bool_parser
 - [ ] pest
   - [ ] calculator
