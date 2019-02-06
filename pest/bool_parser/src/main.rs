@@ -59,7 +59,7 @@ fn generate_ast(pair: Pair<Rule>) -> Expression {
 
 fn consume(pair: Pair<Rule>, climber: &PrecClimber<Rule>) -> Expression {
     let atom = |pair| consume(pair, climber);
-    let infix = |lhs, op: Pair<Rule>, rhs| match op.as_rule() {
+    let infix = |lhs, op, rhs| match (op as Pair<Rule>).as_rule() {
         Rule::and_op => Expression::AndExpr(Box::new(lhs), Box::new(rhs)),
         Rule::or_op => Expression::OrExpr(Box::new(lhs), Box::new(rhs)),
         _ => unreachable!(),
@@ -67,8 +67,7 @@ fn consume(pair: Pair<Rule>, climber: &PrecClimber<Rule>) -> Expression {
 
     match pair.as_rule() {
         Rule::expr => {
-            let pairs = pair.into_inner();
-            climber.climb(pairs, atom, infix)
+            climber.climb(pair.into_inner(), atom, infix)
         }
         Rule::paren_bool => pair.into_inner().next().map(atom).unwrap(),
         Rule::comp_expr => {
@@ -86,6 +85,9 @@ fn consume(pair: Pair<Rule>, climber: &PrecClimber<Rule>) -> Expression {
 
 fn main() {
     let str = "a = 1 and b = 2 and c = 3".to_string();
+    let res = convert(str);
+    println!("{:?}", res.unwrap());
+    let str = "a = 1 and (b = 2 and c = 3)".to_string();
     let res = convert(str);
     println!("{:?}", res.unwrap());
 }
