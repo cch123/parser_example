@@ -32,7 +32,7 @@
   - [ ] bool_parser
 - [ ] nom
   - [x] [calculator](nom/calculator)
-  - [ ] bool_parser
+  - [x] [bool_parser](nom/bool_expr_left_assoc)
 - [ ] pest
   - [ ] calculator
   - [x] [bool_parser](pest/bool_parser)
