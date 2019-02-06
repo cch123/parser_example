@@ -12,8 +12,8 @@
 - [ ] combine
   - [ ] calculator
   - [ ] bool_parser
-- [ ] go-internal
-  - [ ] calculator
+- [x] go-internal
+  - [x] [calculator](go-internal/calculator)
   - [x] [bool_parser](go-internal/bool_parser)
 - [ ] go-peg
   - [ ] calculator
@@ -30,7 +30,7 @@
 - [ ] lalrpop
   - [ ] calculator
   - [ ] bool_parser
-- [ ] nom
+- [x] nom
   - [x] [calculator](nom/calculator)
   - [x] [bool_parser](nom/bool_expr_left_assoc)
 - [ ] pest
