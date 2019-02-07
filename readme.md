@@ -33,8 +33,8 @@
 - [x] nom
   - [x] [calculator](nom/calculator)
   - [x] [bool_parser](nom/bool_expr_left_assoc)
-- [ ] pest
-  - [ ] calculator
+- [x] pest
+  - [x] [calculator](pest/calculator)
   - [x] [bool_parser](pest/bool_parser)
 - [ ] syn
   - [ ] calculator

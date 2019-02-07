@@ -1,0 +1,27 @@
+calc_expr = { SOI ~ expr ~ EOI }
+
+expr = {
+    (num_lit | paren)~ (operator ~ (num_lit | paren))*
+}
+
+operator = {
+    add | minus | mul | div
+}
+
+add = {"+"}
+minus = {"-"}
+mul = {"*"}
+div = {"/"}
+
+paren = {
+    "(" ~ expr ~ ")"
+}
+
+num_lit = @{
+    "-"?
+    ~ ("0" | ASCII_NONZERO_DIGIT ~ ASCII_DIGIT*)
+    ~ ("." ~ ASCII_DIGIT*)?
+    ~ (^"e" ~ ("+" | "-")? ~ ASCII_DIGIT+)?
+}
+
+WHITESPACE = _{ " " | "\n" | "\r" }
