@@ -1,12 +1,11 @@
 calc_expr = { SOI ~ expr ~ EOI }
 
 expr = {
-    (num_lit | paren)~ (operator ~ (num_lit | paren))*
+    (num_lit | paren) ~ (op ~ (num_lit | paren))*
+
 }
 
-operator = {
-    add | minus | mul | div
-}
+op = _{ add | minus | mul | div }
 
 add = {"+"}
 minus = {"-"}
