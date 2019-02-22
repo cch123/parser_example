@@ -1,0 +1,20 @@
+# Simple calculator
+EXPR         ←  ATOM (BINOP ATOM)*
+ATOM         ←  (FIELD OP VALUE) / '(' EXPR ')'
+BINOP        ←  AND / OR
+AND          ←  'and' / 'AND'
+OR           ← 'or' / 'OR'
+FIELD        ← < [a-z]+ >
+OP           ← EQ
+EQ           ← '='
+NEQ          ← '!='
+GT           ← '>'
+VALUE        ←  STRING_LIT / NUM_LIT
+NUM_LIT      ←  < [0-9]+ >
+STRING_LIT   ←  < [a-z]+ >
+%whitespace  ←  [ \t\r\n]*
+---
+# Expression parsing option
+%expr  = EXPR   # Rule to apply 'precedence climbing method' to
+%binop = L AND  # Precedence level 1
+%binop = L OR  # Precedence level 1
