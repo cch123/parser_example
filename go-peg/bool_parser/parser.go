@@ -14,6 +14,11 @@ func setUpGrammer() map[string]*gopeg.Rule {
 */
 
 func main() {
+	// 注意
+	//EXPR         ← ATOM ((AND/OR) ATOM)*
+	// 这样是不行的
+	//EXPR         ← ATOM (AND/OR ATOM)*
+
 	grammar := `
 EXPR         ← ATOM ((AND/OR) ATOM)*
 ATOM         ← (FIELD OP VALUE) / '(' EXPR ')'
