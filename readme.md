@@ -16,7 +16,7 @@
   - [x] [calculator](go-internal/calculator)
   - [x] [bool_parser](go-internal/bool_parser)
 - [ ] go-peg
-  - [ ] calculator
+  - [x] [calculator](go-peg/calculator)
   - [ ] bool_parser
 - [ ] go-sqlparser
   - [ ] calculator
