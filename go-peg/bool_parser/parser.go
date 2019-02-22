@@ -7,15 +7,7 @@ import (
 	gopeg "github.com/yhirose/go-peg"
 )
 
-/*
-func setUpGrammer() map[string]*gopeg.Rule {
-	g := map[string]*gopeg.Rule{}
-	return g
-}
-*/
-
 func main() {
-
 	contentBytes, err := ioutil.ReadFile("./grammar.peg")
 	if err != nil {
 		fmt.Println(err)
@@ -37,7 +29,7 @@ func main() {
 
 	ast, err := parser.ParseAndGetAst("a= 1 and b != 2 and c = 3", nil)
 	if err != nil {
-		fmt.Println(err)
+		fmt.Println("ff", err)
 		return
 	}
 	fmt.Println(ast, err)

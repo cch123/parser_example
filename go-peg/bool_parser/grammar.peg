@@ -15,10 +15,11 @@ NEQ          ← <'!='>
 GT           ← <'>'>
 VALUE        ←  STRING_LIT / NUM_LIT
 NUM_LIT      ←  < [0-9]+ >
-STRING_LIT   ←  < [a-z]+ >
+STRING_LIT   ←  < [a-zA-Z]+ >
 %whitespace  ←  [ \t\r\n]*
+
 ---
 # Expression parsing option
 %expr  = EXPR   # Rule to apply 'precedence climbing method' to
-%and = AND  # Precedence level 1
-%or = OR  # Precedence level 1
+%binop = L AND OR # Precedence level 1
+
