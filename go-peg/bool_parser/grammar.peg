@@ -4,9 +4,9 @@ FIELD       ←  < [a-z]+ >
 AND         ← 'and'
 OR         ← 'or'
 OP           ← EQ
-EQ           ← '='
-NEQ          ← '!='
-GT           ← '>'
+EQ           ← <'='>
+NEQ          ← <'!='>
+GT           ← <'>'>
 VALUE        ←  STRING_LIT / NUM_LIT
 NUM_LIT      ←  < [0-9]+ >
 STRING_LIT   ←  < [a-z]+ >

@@ -18,12 +18,12 @@ func main() {
 EXPR         ← ATOM ((AND/OR) ATOM)*
 ATOM         ← (FIELD OP VALUE) / '(' EXPR ')'
 FIELD       ←  < [a-z]+ >
-AND         ← 'and'
-OR         ← 'or'
+AND         ← <'and'>
+OR         ← <'or'>
 OP           ← EQ / NEQ / GT
-EQ           ← '='
-NEQ          ← '!='
-GT           ← '>'
+EQ           ← <'='>
+NEQ          ← <'!='>
+GT           ← <'>'>
 VALUE        ←  STRING_LIT / NUM_LIT
 NUM_LIT      ←  < [0-9]+ >
 STRING_LIT   ←  < [a-z]+ >
@@ -42,7 +42,7 @@ STRING_LIT   ←  < [a-z]+ >
 		return
 	}
 
-	ast, err := parser.ParseAndGetAst("a = 1 and b != 2", nil)
+	ast, err := parser.ParseAndGetAst("a=1 and b != 2", nil)
 	if err != nil {
 		fmt.Println(err)
 		return
