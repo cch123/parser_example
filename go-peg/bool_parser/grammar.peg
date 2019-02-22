@@ -1,13 +1,24 @@
-EXPR         ← ATOM ((AND/OR) ATOM)*
+# 注意
+# EXPR         ← ATOM ((AND/OR) ATOM)*
+# 这样是不行的
+# EXPR         ← ATOM (AND/OR ATOM)*
+
+EXPR         ← ATOM (BINOP ATOM)*
 ATOM         ← (FIELD OP VALUE) / '(' EXPR ')'
+BINOP       ← AND / OR
 FIELD       ←  < [a-z]+ >
-AND         ← 'and'
-OR         ← 'or'
-OP           ← EQ
+AND         ← <'and'>
+OR         ← <'or'>
+OP           ← EQ / NEQ / GT
 EQ           ← <'='>
 NEQ          ← <'!='>
 GT           ← <'>'>
 VALUE        ←  STRING_LIT / NUM_LIT
 NUM_LIT      ←  < [0-9]+ >
 STRING_LIT   ←  < [a-z]+ >
-%whitespace  ←  [ \t\r\n]
+%whitespace  ←  [ \t\r\n]*
+---
+# Expression parsing option
+%expr  = EXPR   # Rule to apply 'precedence climbing method' to
+%and = AND  # Precedence level 1
+%or = OR  # Precedence level 1

@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io/ioutil"
 
 	gopeg "github.com/yhirose/go-peg"
 )
@@ -14,26 +15,13 @@ func setUpGrammer() map[string]*gopeg.Rule {
 */
 
 func main() {
-	// 注意
-	//EXPR         ← ATOM ((AND/OR) ATOM)*
-	// 这样是不行的
-	//EXPR         ← ATOM (AND/OR ATOM)*
 
-	grammar := `
-EXPR         ← ATOM ((AND/OR) ATOM)*
-ATOM         ← (FIELD OP VALUE) / '(' EXPR ')'
-FIELD       ←  < [a-z]+ >
-AND         ← <'and'>
-OR         ← <'or'>
-OP           ← EQ / NEQ / GT
-EQ           ← <'='>
-NEQ          ← <'!='>
-GT           ← <'>'>
-VALUE        ←  STRING_LIT / NUM_LIT
-NUM_LIT      ←  < [0-9]+ >
-STRING_LIT   ←  < [a-z]+ >
-%whitespace  ←  [ \t\r\n]*
-	`
+	contentBytes, err := ioutil.ReadFile("./grammar.peg")
+	if err != nil {
+		fmt.Println(err)
+		return
+	}
+	grammar := string(contentBytes)
 	parser, err := gopeg.NewParser(grammar)
 	if err != nil {
 		fmt.Println(err)
@@ -47,7 +35,7 @@ STRING_LIT   ←  < [a-z]+ >
 		return
 	}
 
-	ast, err := parser.ParseAndGetAst("a=1 and b != 2", nil)
+	ast, err := parser.ParseAndGetAst("a= 1 and b != 2 and c = 3", nil)
 	if err != nil {
 		fmt.Println(err)
 		return
