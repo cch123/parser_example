@@ -15,15 +15,9 @@
 - [x] go-internal
   - [x] [calculator](go-internal/calculator)
   - [x] [bool_parser](go-internal/bool_parser)
-- [ ] go-peg
+- [x] go-peg
   - [x] [calculator](go-peg/calculator)
-  - [ ] bool_parser
-- [ ] go-sqlparser
-  - [ ] calculator
-  - [ ] bool_parser
-- [ ] go-tidb-parser
-  - [ ] calculator
-  - [ ] bool_parser
+  - [x] [bool_parser](go-peg/bool_parser)
 - [ ] goyacc
   - [ ] calculator
   - [ ] bool_parser
@@ -36,6 +30,3 @@
 - [x] pest
   - [x] [calculator](pest/calculator)
   - [x] [bool_parser](pest/bool_parser)
-- [ ] syn
-  - [ ] calculator
-  - [ ] bool_parser
