@@ -27,10 +27,36 @@ func main() {
 		return
 	}
 
-	ast, err := parser.ParseAndGetAst("a= 1 and b != 2 and c = 3", nil)
+	ast, err := parser.ParseAndGetAst("(a=1)", nil)
 	if err != nil {
 		fmt.Println("ff", err)
 		return
 	}
-	fmt.Println(ast, err)
+	traverseAST(ast)
+}
+
+func traverseAST(ast *gopeg.Ast) {
+	println(ast.Name)
+	switch ast.Name {
+	case "EXPR":
+		// fold
+		println(ast.Nodes[0].Name)
+		traverseAST(ast.Nodes[0])
+	case "ATOM":
+		// go deeper
+		// (FIELD OP VALUE) / '(' EXPR ')'
+		// return
+		println(ast.Nodes[0].Name)
+		inner := ast.Nodes[0]
+		switch inner.Name {
+		case "EXPR":
+			traverseAST(inner)
+		case "COMP":
+			println(inner.Nodes[0].Name)
+			println(inner.Nodes[1].Name)
+			println(inner.Nodes[2].Name)
+		}
+	default:
+		println("fuck")
+	}
 }

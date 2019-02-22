@@ -4,7 +4,8 @@
 # EXPR         ← ATOM (AND/OR ATOM)*
 
 EXPR         ← ATOM (BINOP ATOM)*
-ATOM         ← (FIELD OP VALUE) / '(' EXPR ')'
+ATOM         ← (COMP) / '(' EXPR ')'
+COMP        ← FIELD OP VALUE
 BINOP       ← AND / OR
 FIELD       ←  < [a-z]+ >
 AND         ← <'and'>
@@ -17,9 +18,4 @@ VALUE        ←  STRING_LIT / NUM_LIT
 NUM_LIT      ←  < [0-9]+ >
 STRING_LIT   ←  < [a-zA-Z]+ >
 %whitespace  ←  [ \t\r\n]*
-
----
-# Expression parsing option
-%expr  = EXPR   # Rule to apply 'precedence climbing method' to
-%binop = L AND OR # Precedence level 1
 
