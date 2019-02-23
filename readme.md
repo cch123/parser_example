@@ -12,12 +12,18 @@
 - [ ] combine
   - [ ] calculator
   - [ ] bool_parser
+- [ ] particle
+  - [x] [calculator](particle/calculator)
+  - [ ] bool_parser
 - [x] go-internal
   - [x] [calculator](go-internal/calculator)
   - [x] [bool_parser](go-internal/bool_parser)
 - [x] go-peg
   - [x] [calculator](go-peg/calculator)
   - [x] [bool_parser](go-peg/bool_parser)
+- [ ] peg
+  - [ ] [calculator](peg/calculator)
+  - [ ] [bool_parser](peg/bool_parser)
 - [ ] goyacc
   - [ ] calculator
   - [ ] bool_parser

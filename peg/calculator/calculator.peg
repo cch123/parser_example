@@ -1,0 +1,21 @@
+# Copyright 2010 The Go Authors. All rights reserved.
+# Use of this source code is governed by a BSD-style
+# license that can be found in the LICENSE file.
+
+package main
+
+type Calculator Peg {}
+
+expr <- sp e1 !.
+e1 <- sp value (sp op value sp)*
+value <- < [0-9]+ > sp 
+       / open e1 close
+op <- sp add / minus / multiply / divide
+add <- '+' sp
+minus <- '-' sp
+multiply <- '*' sp
+divide <- '/' sp
+
+open <- '(' sp
+close <- ')' sp
+sp <- ( ' ' / '\t' )*
