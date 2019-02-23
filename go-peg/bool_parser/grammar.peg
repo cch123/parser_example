@@ -8,8 +8,8 @@ ATOM         ← (COMP) / '(' EXPR ')'
 COMP        ← FIELD OP VALUE
 BINOP       ← AND / OR
 FIELD       ←  < [a-z]+ >
-AND         ← <'and'>
-OR         ← <'or'>
+AND         ← < 'and' >
+OR         ← < 'or' >
 OP           ← EQ / NEQ / GT
 EQ           ← <'='>
 NEQ          ← <'!='>
@@ -18,4 +18,5 @@ VALUE        ←  STRING_LIT / NUM_LIT
 NUM_LIT      ←  < [0-9]+ >
 STRING_LIT   ←  < [a-zA-Z]+ >
 %whitespace  ←  [ \t\r\n]*
+
 
