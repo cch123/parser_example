@@ -1,22 +1,29 @@
-# 注意
+# 注意，这样可以
 # EXPR         ← ATOM ((AND/OR) ATOM)*
-# 这样是不行的
+# 但这样是不行的
 # EXPR         ← ATOM (AND/OR ATOM)*
 
 EXPR         ← ATOM (BINOP ATOM)*
 ATOM         ← (COMP) / '(' EXPR ')'
 COMP        ← FIELD OP VALUE
-BINOP       ← AND / OR
+BINOP       ← <'and' / 'or'>
+# BINOP     ← AND / OR 这样是不行的
+# 目前 go-peg 进行 precedence climing 的时候
+# 只能支持 token literal，参见：
+# https://github.com/yhirose/go-peg/issues/6
 FIELD       ←  < [a-z]+ >
-AND         ← < 'and' >
-OR         ← < 'or' >
 OP           ← EQ / NEQ / GT
 EQ           ← <'='>
-NEQ          ← <'!='>
+NEQ          ← <'!=' / '<>'>
 GT           ← <'>'>
 VALUE        ←  STRING_LIT / NUM_LIT
 NUM_LIT      ←  < [0-9]+ >
-STRING_LIT   ←  < [a-zA-Z]+ >
-%whitespace  ←  [ \t\r\n]*
+STRING_LIT   ←  < [a-zA-Z]+>
 
+%whitespace  ←  [ \t\r\n]*
+---
+# Expression parsing option
+%expr  = EXPR   # Rule to apply 'precedence climbing method' to
+%binop = L or  # Precedence level 1
+%binop = L and  # Precedence level 2
 

@@ -44,13 +44,14 @@ func main() {
 		return
 	}
 
-	ast, err := parser.ParseAndGetAst("(a=1 or b = 2 and c =4)", nil)
+	ast, err := parser.ParseAndGetAst("(a= 3 or b = 2 and c =4)", nil)
 	if err != nil {
 		fmt.Println("ff", err)
 		return
 	}
-	myAST := traverseAST(ast)
-	fmt.Printf("%#v\n", myAST)
+	fmt.Println(ast.String())
+	//myAST := traverseAST(ast)
+	//fmt.Printf("%#v\n", myAST)
 }
 
 func traverseAST(ast *gopeg.Ast) interface{} {
