@@ -6,16 +6,16 @@ package main
 
 type Calculator Peg {}
 
-expr <- sp e1 !.
-e1 <- sp value (sp op value sp)*
-value <- < [0-9]+ > sp 
+expr <- ws e1 !.
+e1 <- ws value (ws op ws value ws)*
+value <- < [0-9]+ >
        / open e1 close
-op <- sp add / minus / multiply / divide
-add <- '+' sp
-minus <- '-' sp
-multiply <- '*' sp
-divide <- '/' sp
+op <- add / minus / multiply / divide
+add <- '+'
+minus <- '-'
+multiply <- '*'
+divide <- '/'
 
-open <- '(' sp
-close <- ')' sp
-sp <- ( ' ' / '\t' )*
+open <- '(' ws
+close <- ')' ws
+ws <- ( ' ' / '\t' )*

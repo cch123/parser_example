@@ -28,7 +28,7 @@ const (
 	ruledivide
 	ruleopen
 	ruleclose
-	rulesp
+	rulews
 	rulePegText
 )
 
@@ -44,7 +44,7 @@ var rul3s = [...]string{
 	"divide",
 	"open",
 	"close",
-	"sp",
+	"ws",
 	"PegText",
 }
 
@@ -319,12 +319,12 @@ func (p *Calculator) Init() {
 
 	_rules = [...]func() bool{
 		nil,
-		/* 0 expr <- <(sp e1 !.)> */
+		/* 0 expr <- <(ws e1 !.)> */
 		func() bool {
 			position0, tokenIndex0 := position, tokenIndex
 			{
 				position1 := position
-				if !_rules[rulesp]() {
+				if !_rules[rulews]() {
 					goto l0
 				}
 				if !_rules[rulee1]() {
@@ -346,12 +346,12 @@ func (p *Calculator) Init() {
 			position, tokenIndex = position0, tokenIndex0
 			return false
 		},
-		/* 1 e1 <- <(sp value (sp op value sp)*)> */
+		/* 1 e1 <- <(ws value (ws op ws value ws)*)> */
 		func() bool {
 			position3, tokenIndex3 := position, tokenIndex
 			{
 				position4 := position
-				if !_rules[rulesp]() {
+				if !_rules[rulews]() {
 					goto l3
 				}
 				if !_rules[rulevalue]() {
@@ -360,16 +360,19 @@ func (p *Calculator) Init() {
 			l5:
 				{
 					position6, tokenIndex6 := position, tokenIndex
-					if !_rules[rulesp]() {
+					if !_rules[rulews]() {
 						goto l6
 					}
 					if !_rules[ruleop]() {
 						goto l6
 					}
+					if !_rules[rulews]() {
+						goto l6
+					}
 					if !_rules[rulevalue]() {
 						goto l6
 					}
-					if !_rules[rulesp]() {
+					if !_rules[rulews]() {
 						goto l6
 					}
 					goto l5
@@ -383,7 +386,7 @@ func (p *Calculator) Init() {
 			position, tokenIndex = position3, tokenIndex3
 			return false
 		},
-		/* 2 value <- <((<[0-9]+> sp) / (open e1 close))> */
+		/* 2 value <- <(<[0-9]+> / (open e1 close))> */
 		func() bool {
 			position7, tokenIndex7 := position, tokenIndex
 			{
@@ -409,9 +412,6 @@ func (p *Calculator) Init() {
 						}
 						add(rulePegText, position11)
 					}
-					if !_rules[rulesp]() {
-						goto l10
-					}
 					goto l9
 				l10:
 					position, tokenIndex = position9, tokenIndex9
@@ -433,16 +433,13 @@ func (p *Calculator) Init() {
 			position, tokenIndex = position7, tokenIndex7
 			return false
 		},
-		/* 3 op <- <((sp add) / minus / multiply / divide)> */
+		/* 3 op <- <(add / minus / multiply / divide)> */
 		func() bool {
 			position14, tokenIndex14 := position, tokenIndex
 			{
 				position15 := position
 				{
 					position16, tokenIndex16 := position, tokenIndex
-					if !_rules[rulesp]() {
-						goto l17
-					}
 					if !_rules[ruleadd]() {
 						goto l17
 					}
@@ -473,7 +470,7 @@ func (p *Calculator) Init() {
 			position, tokenIndex = position14, tokenIndex14
 			return false
 		},
-		/* 4 add <- <('+' sp)> */
+		/* 4 add <- <'+'> */
 		func() bool {
 			position20, tokenIndex20 := position, tokenIndex
 			{
@@ -482,9 +479,6 @@ func (p *Calculator) Init() {
 					goto l20
 				}
 				position++
-				if !_rules[rulesp]() {
-					goto l20
-				}
 				add(ruleadd, position21)
 			}
 			return true
@@ -492,7 +486,7 @@ func (p *Calculator) Init() {
 			position, tokenIndex = position20, tokenIndex20
 			return false
 		},
-		/* 5 minus <- <('-' sp)> */
+		/* 5 minus <- <'-'> */
 		func() bool {
 			position22, tokenIndex22 := position, tokenIndex
 			{
@@ -501,9 +495,6 @@ func (p *Calculator) Init() {
 					goto l22
 				}
 				position++
-				if !_rules[rulesp]() {
-					goto l22
-				}
 				add(ruleminus, position23)
 			}
 			return true
@@ -511,7 +502,7 @@ func (p *Calculator) Init() {
 			position, tokenIndex = position22, tokenIndex22
 			return false
 		},
-		/* 6 multiply <- <('*' sp)> */
+		/* 6 multiply <- <'*'> */
 		func() bool {
 			position24, tokenIndex24 := position, tokenIndex
 			{
@@ -520,9 +511,6 @@ func (p *Calculator) Init() {
 					goto l24
 				}
 				position++
-				if !_rules[rulesp]() {
-					goto l24
-				}
 				add(rulemultiply, position25)
 			}
 			return true
@@ -530,7 +518,7 @@ func (p *Calculator) Init() {
 			position, tokenIndex = position24, tokenIndex24
 			return false
 		},
-		/* 7 divide <- <('/' sp)> */
+		/* 7 divide <- <'/'> */
 		func() bool {
 			position26, tokenIndex26 := position, tokenIndex
 			{
@@ -539,9 +527,6 @@ func (p *Calculator) Init() {
 					goto l26
 				}
 				position++
-				if !_rules[rulesp]() {
-					goto l26
-				}
 				add(ruledivide, position27)
 			}
 			return true
@@ -549,7 +534,7 @@ func (p *Calculator) Init() {
 			position, tokenIndex = position26, tokenIndex26
 			return false
 		},
-		/* 8 open <- <('(' sp)> */
+		/* 8 open <- <('(' ws)> */
 		func() bool {
 			position28, tokenIndex28 := position, tokenIndex
 			{
@@ -558,7 +543,7 @@ func (p *Calculator) Init() {
 					goto l28
 				}
 				position++
-				if !_rules[rulesp]() {
+				if !_rules[rulews]() {
 					goto l28
 				}
 				add(ruleopen, position29)
@@ -568,7 +553,7 @@ func (p *Calculator) Init() {
 			position, tokenIndex = position28, tokenIndex28
 			return false
 		},
-		/* 9 close <- <(')' sp)> */
+		/* 9 close <- <(')' ws)> */
 		func() bool {
 			position30, tokenIndex30 := position, tokenIndex
 			{
@@ -577,7 +562,7 @@ func (p *Calculator) Init() {
 					goto l30
 				}
 				position++
-				if !_rules[rulesp]() {
+				if !_rules[rulews]() {
 					goto l30
 				}
 				add(ruleclose, position31)
@@ -587,7 +572,7 @@ func (p *Calculator) Init() {
 			position, tokenIndex = position30, tokenIndex30
 			return false
 		},
-		/* 10 sp <- <(' ' / '\t')*> */
+		/* 10 ws <- <(' ' / '\t')*> */
 		func() bool {
 			{
 				position33 := position
@@ -613,7 +598,7 @@ func (p *Calculator) Init() {
 				l35:
 					position, tokenIndex = position35, tokenIndex35
 				}
-				add(rulesp, position33)
+				add(rulews, position33)
 			}
 			return true
 		},
