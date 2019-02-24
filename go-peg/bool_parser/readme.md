@@ -1,6 +1,6 @@
 https://github.com/yhirose/go-peg
 
-这个库有 bug：
+有些特性还不支持:
 
 https://github.com/yhirose/go-peg/issues/6
 
