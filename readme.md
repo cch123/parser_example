@@ -6,9 +6,6 @@
 
 ## 完成情况
 
-- [ ] prataprc/goparsec
-  - [ ] calculator
-  - [ ] bool_parser
 - [ ] antlr
   - [x] [calculator](antlr/calculator)
   - [ ] bool_parser
