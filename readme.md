@@ -10,7 +10,7 @@
   - [ ] calculator
   - [ ] bool_parser
 - [ ] antlr
-  - [ ] calculator
+  - [x] [calculator](antlr/calculator)
   - [ ] bool_parser
 - [ ] combine
   - [ ] calculator
