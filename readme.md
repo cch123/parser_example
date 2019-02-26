@@ -27,9 +27,9 @@
 - [ ] pointlander/peg
   - [x] [calculator](peg/calculator)
   - [ ] bool_parser
-- [ ] goyacc
-  - [ ] calculator
-  - [ ] bool_parser
+- [x] goyacc
+  - [x] [calculator](goyacc/calculator)
+  - [x] [bool_parser](goyacc/bool_parser)
 - [ ] lalrpop
   - [ ] calculator
   - [ ] bool_parser
