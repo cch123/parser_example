@@ -14,7 +14,6 @@ type LogicExpr struct {
     right interface{}
 }
 
-
 func main() {
     if len(os.Args) != 2 {
         log.Fatal("Usage: calculator 'EXPR'")
@@ -23,7 +22,7 @@ func main() {
     if err != nil {
         log.Fatal(err)
     }
-    fmt.Printf("=%#v\n", got)
+    fmt.Printf("%#v\n", got)
 }
 
 // ------ end
@@ -33,13 +32,15 @@ Input <- expr:Expr EOF {
     return expr, nil
 }
 
-Expr <- _ first:CompExpr rest:( _ LogicOp _ CompExpr)* _ {
-    return []interface{}{first, rest}, nil
+Expr <- LogicExpr / Atom
+
+LogicExpr <- _ atom:Atom  _ op:LogicOp _ expr: Expr _ {
+    return  LogicExpr {left : atom, op : op.(string), right: expr},nil
 }
 
-CompExpr <- '(' expr:Expr ')' {
+Atom <- '(' expr:Expr ')' {
     return expr, nil
-} / _ field: Token _ op:Token _ value:Token _{
+} / _ field: Ident _ op:BinOp _ value:Value _{
     return CompExpr{left : field.(string), op: op.(string), right : value.(string)}, nil
 }
 
@@ -47,7 +48,15 @@ LogicOp <- ( "and" / "or" ) {
     return string(c.text), nil
 }
 
-Token <- [0-9]+ {
+BinOp <- ("!=" / ">=" / "<=" / "=" / "<>" / ">" / "<") {
+    return string(c.text),nil
+}
+
+Ident <- [a-zA-Z][a-zA-Z0-9]* {
+    return string(c.text),nil
+}
+
+Value <- [0-9]+ {
     return string(c.text),nil
 }
 
