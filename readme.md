@@ -39,3 +39,19 @@
 - [x] pest
   - [x] [calculator](pest/calculator)
   - [x] [bool_parser](pest/bool_parser)
+
+## 一些相关的文章
+
+https://freemasen.github.io/parsers_presentation/06.pest/src.html
+
+https://phaazon.net/blog/glsl-pest-part-1
+
+https://phaazon.net/blog/glsl-pest-part-2
+
+https://unhandledexpression.com/general/2018/10/04/no-pest-is-not-faster-than-nom.html
+
+https://github.com/Geal/pestvsnom
+
+https://qiita.com/ubnt_intrepid/items/9d9eeffb3f59176381fd
+
+
