@@ -6,6 +6,9 @@
 
 ## 完成情况
 
+- [ ] pigeon
+  - [x] [calculator](pigeon/calculator)
+  - [ ] bool_parser
 - [ ] antlr
   - [x] [calculator](antlr/calculator)
   - [ ] bool_parser
