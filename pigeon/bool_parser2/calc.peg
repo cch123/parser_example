@@ -1,0 +1,56 @@
+{
+//------ start
+package main
+
+type CompExpr struct {
+    left string
+    op string
+    right string
+}
+
+type LogicExpr struct {
+    left interface{}
+    op string
+    right interface{}
+}
+
+
+func main() {
+    if len(os.Args) != 2 {
+        log.Fatal("Usage: calculator 'EXPR'")
+    }
+    got, err := ParseReader("", strings.NewReader(os.Args[1]))
+    if err != nil {
+        log.Fatal(err)
+    }
+    fmt.Printf("=%#v\n", got)
+}
+
+// ------ end
+}
+
+Input <- expr:Expr EOF {
+    return expr, nil
+}
+
+Expr <- _ first:CompExpr rest:( _ LogicOp _ CompExpr)* _ {
+    return []interface{}{first, rest}, nil
+}
+
+CompExpr <- '(' expr:Expr ')' {
+    return expr, nil
+} / _ field: Token _ op:Token _ value:Token _{
+    return CompExpr{left : field.(string), op: op.(string), right : value.(string)}, nil
+}
+
+LogicOp <- ( "and" / "or" ) {
+    return string(c.text), nil
+}
+
+Token <- [0-9]+ {
+    return string(c.text),nil
+}
+
+_ "whitespace" <- [ \n\t\r]*
+
+EOF <- !.
