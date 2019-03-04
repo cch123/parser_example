@@ -9,6 +9,9 @@
 - [x] pigeon
   - [x] [calculator](pigeon/calculator)
   - [x] [bool_parser](pigeon/bool_parser)
+- [x] pigeon
+  - [x] [calculator](pigeon/calculator)
+  - [x] [bool_parser](pigeon/bool_parser)
 - [ ] antlr
   - [x] [calculator](antlr/calculator)
   - [ ] bool_parser
@@ -39,6 +42,9 @@
 - [x] pest
   - [x] [calculator](pest/calculator)
   - [x] [bool_parser](pest/bool_parser)
+- [ ] combine
+  - [ ] calculator
+  - [ ] bool_parser
 
 ## 一些相关的文章
 
