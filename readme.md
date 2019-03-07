@@ -15,9 +15,6 @@
 - [ ] antlr
   - [x] [calculator](antlr/calculator)
   - [ ] bool_parser
-- [ ] combine
-  - [ ] calculator
-  - [ ] bool_parser
 - [ ] particle
   - [x] [calculator](particle/calculator)
   - [ ] bool_parser
