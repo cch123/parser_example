@@ -2,10 +2,10 @@
 
 lalrpop_mod!(pub calculator1); // synthesized by LALRPOP
 
-#[test]
-fn calculator1() {
+fn main() {
     assert!(calculator1::TermParser::new().parse("22").is_ok());
     assert!(calculator1::TermParser::new().parse("(22)").is_ok());
     assert!(calculator1::TermParser::new().parse("((((22))))").is_ok());
     assert!(calculator1::TermParser::new().parse("((22)").is_err());
+    println!("{:?}", calculator1::TermParser::new().parse("((22))"))
 }
