@@ -29,13 +29,18 @@ fn walk_expr(expr: ast::Expr) -> i32 {
 }
 
 fn main() {
-    let expr = calculator1::ExprParser::new()
-        .parse("10 * 20 +2")
-        .unwrap();
+    let parse_result = calculator1::ExprParser::new()
+        .parse("10 * 20 + 3");
 
-    dbg!(&expr);
+    match parse_result {
+        Ok(expr) => {
+            println!("result is : {}", walk_expr(*expr));
+        },
+        Err(e) => {
+            println!("failed when parse expr, error is : {}", e)
+        },
+    }
 
-    println!("result is : {}", walk_expr(*expr));
 }
 
 //assert_eq!(&format!("{:?}", expr), "((22 * 44) + 66)");
