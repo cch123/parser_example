@@ -31,7 +31,7 @@
   - [x] [calculator](goyacc/calculator)
   - [x] [bool_parser](goyacc/bool_parser)
 - [ ] lalrpop
-  - [ ] calculator
+  - [x] [calculator](lalrpop/calculator)
   - [ ] bool_parser
 - [x] nom
   - [x] [calculator](nom/calculator)
