@@ -1,0 +1,11 @@
+[package]
+name = "calculator"
+version = "0.1.0"
+authors = ["Xargin <cao1988228@163.com>"]
+edition = "2018"
+
+[dependencies]
+
+[dependencies.nom]
+version = "^5"
+features = ["regexp"]
