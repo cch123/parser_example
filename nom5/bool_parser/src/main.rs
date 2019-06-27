@@ -44,11 +44,15 @@ pub enum BoolExpr<'a> {
 
 // 求优雅写法
 fn and_expr(i: &str) -> IResult<&str, BoolExpr> {
-    let (i, left) = atom(i)?;
-    let (i, _) = space0(i)?;
-    let (i, op) = tag_no_case("and")(i)?;
-    let (i, _) = space0(i)?;
-    let (i, right) = bool_expr(i)?;
+    let (i, (_, left, _, _, _, right, _)) = tuple((
+        space0,
+        atom,
+        space0,
+        tag_no_case("and"),
+        space0,
+        bool_expr,
+        space0,
+    ))(i)?;
     Ok((
         i,
         BoolExpr::AndExpr {
@@ -59,11 +63,16 @@ fn and_expr(i: &str) -> IResult<&str, BoolExpr> {
 }
 
 fn or_expr(i: &str) -> IResult<&str, BoolExpr> {
-    let (i, left) = atom(i)?;
-    let (i, _) = space0(i)?;
-    let (i, op) = tag_no_case("or")(i)?;
-    let (i, _) = space0(i)?;
-    let (i, right) = bool_expr(i)?;
+    let (i, (_, left, _, _, _, right, _)) = tuple((
+        space0,
+        atom,
+        space0,
+        tag_no_case("or"),
+        space0,
+        bool_expr,
+        space0,
+    ))(i)?;
+
     Ok((
         i,
         BoolExpr::OrExpr {
@@ -74,11 +83,15 @@ fn or_expr(i: &str) -> IResult<&str, BoolExpr> {
 }
 
 fn paren_expr(i: &str) -> IResult<&str, BoolExpr> {
-    let (i, _) = tag("(")(i)?;
-    let (i, _) = space0(i)?;
-    let (i, expr) = bool_expr(i)?;
-    let (i, _) = space0(i)?;
-    let (i, _) = tag(")")(i)?;
+    let (i, (_, _, _, expr, _, _, _)) = tuple((
+        space0,
+        tag("("),
+        space0,
+        bool_expr,
+        space0,
+        tag(")"),
+        space0,
+    ))(i)?;
     Ok((i, expr))
 }
 
@@ -92,12 +105,14 @@ fn atom(i: &str) -> IResult<&str, BoolExpr> {
 
 fn comp_expr(i: &str) -> IResult<&str, BoolExpr> {
     // 优化写法，和下面的是等价的
-    let (i, (left, _, op, _, right)) = tuple((
+    let (i, (_, left, _, op, _, right, _)) = tuple((
+        space0,
         alphanumeric,
         space0,
         is_not(" \t\r\nabcdefghijklmnopqrstuvwxyz"),
         space0,
         alphanumeric,
+        space0,
     ))(i)?;
     /*
     let (i, left) = alphanumeric(i)?;
@@ -126,7 +141,7 @@ fn comp_expr(i: &str) -> IResult<&str, BoolExpr> {
 
 fn main() {
     //let (s, expr) = comp_expr("a1 = b");
-    match bool_expr("(a1 >=b or a = 1) and c > 832") {
+    match bool_expr(" ( a1 >=b or a= 1) and c > 832 ") {
         Ok((s, expr)) => {
             println!("{:#?}", s);
             println!("{:#?}", expr);
