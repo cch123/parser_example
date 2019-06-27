@@ -15,9 +15,10 @@ use nom::{
     branch::alt,
     bytes::complete::{tag,is_not},
 };
-use nom::bytes::complete::{take_until, take_while};
+use nom::bytes::complete::{take_until, take_while, tag_no_case};
 use nom::character::{is_alphanumeric, is_alphabetic};
 use nom::character::complete::{space0, not_line_ending};
+use nom::sequence::delimitedc;
 
 
 #[derive(Debug)]
@@ -40,6 +41,34 @@ pub enum BoolExpr <'a>{
     }
 }
 
+// 求优雅写法
+fn and_expr(i: &str) -> IResult<&str, BoolExpr> {
+    let (i, left) = comp_expr(i)?;
+    let (i, _) = space0(i)?;
+    let (i, op) = tag_no_case("and")(i)?;
+    let (i, _) = space0(i)?;
+    let (i, right) = bool_expr(i)?;
+    Ok((i, BoolExpr::AndExpr {left: Box::new(left),right: Box::new(right)}))
+}
+
+fn or_expr(i: &str) -> IResult<&str, BoolExpr> {
+    let (i, left) = comp_expr(i)?;
+    let (i, _) = space0(i)?;
+    let (i, op) = tag_no_case("or")(i)?;
+    let (i, _) = space0(i)?;
+    let (i, right) = bool_expr(i)?;
+    Ok((i, BoolExpr::OrExpr{left: Box::new(left),right: Box::new(right)}))
+}
+
+fn bool_expr(i: &str) -> IResult<&str, BoolExpr> {
+    alt((
+        and_expr,
+        or_expr,
+        comp_expr,
+    ))(i)
+}
+
+// 看看能不能优化一下，这么写不简洁，还不如以前的 do_parse 宏简单
 fn comp_expr(i: &str) -> IResult<&str, BoolExpr> {
     let (i, left) = alphanumeric(i)?;
 
@@ -60,7 +89,7 @@ fn comp_expr(i: &str) -> IResult<&str, BoolExpr> {
 
 fn main() {
     //let (s, expr) = comp_expr("a1 = b");
-    match comp_expr("a1>b") {
+    match bool_expr("a1>=b or a = 1 and c > 832") {
         Ok((s,expr)) => {
             println!("{:#?}", s);
             println!("{:#?}", expr);

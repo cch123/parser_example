@@ -38,7 +38,7 @@
   - [x] [bool_parser](nom/bool_expr_left_assoc)
 - [x] nom5
   - [x] [calculator](nom5/calculator)
-  - [ ] bool_parser
+  - [x] [bool_parser](nom5/bool_parser)
 - [x] pest
   - [x] [calculator](pest/calculator)
   - [x] [bool_parser](pest/bool_parser)
