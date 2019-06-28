@@ -45,25 +45,40 @@ pub enum BoolExpr<'a> {
 
 // a = 1 and b = 3 and d = 4
 fn and_expr(i: &str) -> IResult<&str, BoolExpr> {
-    let (i, init) = comp_expr(i)?;
+    let (i, init) = atom(i)?;
     fold_many0(
         pair(tag_no_case("and"), atom),
         init,
         |acc, (op, val): (&str, BoolExpr)| {
-            return BoolExpr::AndExpr{
-                left : Box::new(acc),
+            return BoolExpr::AndExpr {
+                left: Box::new(acc),
                 right: Box::new(val),
-            }
+            };
         },
     )(i)
-
 }
 
 fn or_expr(i: &str) -> IResult<&str, BoolExpr> {
+    let (i, init) = atom_or_expr(i)?;
+    fold_many0(
+        pair(tag_no_case("or"), alt((atom_or_expr, atom))),
+        init,
+        |acc, (op, val): (&str, BoolExpr)| {
+            return BoolExpr::OrExpr {
+                left: Box::new(acc),
+                right: Box::new(val),
+            };
+        },
+    )(i)
+}
+
+fn atom_or_expr(i: &str) -> IResult<&str, BoolExpr> {
     let (i, (_, left, _, _, _, right, _)) = tuple((
         space0,
         alt((and_expr, comp_expr)),
-        space0, tag_no_case("or"), space0,
+        space0,
+        tag_no_case("or"),
+        space0,
         alt((and_expr, comp_expr)),
         space0,
     ))(i)?;
@@ -96,7 +111,7 @@ fn bool_expr(i: &str) -> IResult<&str, BoolExpr> {
 }
 
 fn atom(i: &str) -> IResult<&str, BoolExpr> {
-    alt((paren_expr, and_expr, or_expr, comp_expr))(i)
+    alt((paren_expr, comp_expr))(i)
 }
 
 fn comp_expr(i: &str) -> IResult<&str, BoolExpr> {
@@ -122,7 +137,6 @@ fn comp_expr(i: &str) -> IResult<&str, BoolExpr> {
 }
 
 fn main() {
-
     match bool_expr(" d= 1 and a1 >=b or a= 1 and c > 832 ") {
         Ok((s, expr)) => {
             println!("{:#?}", s);
@@ -156,6 +170,46 @@ fn main() {
     }
 
     match bool_expr("a = 1 and b = 2 and c = 3") {
+        Ok((s, expr)) => {
+            println!("{:#?}", s);
+            println!("{:#?}", expr);
+        }
+        Err(e) => println!("{:#?}", e),
+    }
+
+    match bool_expr("a = 1 and b = 2 and c = 3 and d= 5") {
+        Ok((s, expr)) => {
+            println!("{:#?}", s);
+            println!("{:#?}", expr);
+        }
+        Err(e) => println!("{:#?}", e),
+    }
+
+    match bool_expr("a = 1 and b = 2 or c = 3 and d= 5") {
+        Ok((s, expr)) => {
+            println!("{:#?}", s);
+            println!("{:#?}", expr);
+        }
+        Err(e) => println!("{:#?}", e),
+    }
+
+    match bool_expr("a = 1 or b = 2 or d= 5") {
+        Ok((s, expr)) => {
+            println!("{:#?}", s);
+            println!("{:#?}", expr);
+        }
+        Err(e) => println!("{:#?}", e),
+    }
+
+    match bool_expr("a = 1 or b = 2") {
+        Ok((s, expr)) => {
+            println!("{:#?}", s);
+            println!("{:#?}", expr);
+        }
+        Err(e) => println!("{:#?}", e),
+    }
+
+    match bool_expr("a = 1") {
         Ok((s, expr)) => {
             println!("{:#?}", s);
             println!("{:#?}", expr);
