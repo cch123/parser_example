@@ -8,7 +8,8 @@ use std::str::FromStr;
 use nom::bytes::complete::{tag_no_case, take_until, take_while};
 use nom::character::complete::{not_line_ending, space0};
 use nom::character::{is_alphabetic, is_alphanumeric};
-use nom::sequence::{delimitedc, tuple};
+use nom::multi::fold_many0;
+use nom::sequence::{delimitedc, pair, tuple};
 use nom::{
     branch::alt,
     bytes::complete::take_till,
@@ -22,7 +23,7 @@ use nom::{
     IResult,
 };
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub enum BoolExpr<'a> {
     CompExpr {
         field: &'a str,
@@ -43,34 +44,26 @@ pub enum BoolExpr<'a> {
 }
 
 // a = 1 and b = 3 and d = 4
-// TODO fold many
 fn and_expr(i: &str) -> IResult<&str, BoolExpr> {
-    let (i, (_, left, _, _, _, right, _)) = tuple((
-        space0,
-        atom,
-        space0,
-        tag_no_case("and"),
-        space0,
-        atom,
-        space0,
-    ))(i)?;
-
-    Ok((
-        i,
-        BoolExpr::AndExpr {
-            left: Box::new(left),
-            right: Box::new(right),
+    let (i, init) = comp_expr(i)?;
+    fold_many0(
+        pair(tag_no_case("and"), atom),
+        init,
+        |acc, (op, val): (&str, BoolExpr)| {
+            return BoolExpr::AndExpr{
+                left : Box::new(acc),
+                right: Box::new(val),
+            }
         },
-    ))
+    )(i)
+
 }
 
 fn or_expr(i: &str) -> IResult<&str, BoolExpr> {
     let (i, (_, left, _, _, _, right, _)) = tuple((
         space0,
         alt((and_expr, comp_expr)),
-        space0,
-        tag_no_case("or"),
-        space0,
+        space0, tag_no_case("or"), space0,
         alt((and_expr, comp_expr)),
         space0,
     ))(i)?;
@@ -99,11 +92,11 @@ fn paren_expr(i: &str) -> IResult<&str, BoolExpr> {
 }
 
 fn bool_expr(i: &str) -> IResult<&str, BoolExpr> {
-    alt((or_expr, comp_expr))(i)
+    alt((or_expr, and_expr, comp_expr))(i)
 }
 
 fn atom(i: &str) -> IResult<&str, BoolExpr> {
-    alt((comp_expr, paren_expr, and_expr, or_expr))(i)
+    alt((paren_expr, and_expr, or_expr, comp_expr))(i)
 }
 
 fn comp_expr(i: &str) -> IResult<&str, BoolExpr> {
@@ -112,7 +105,7 @@ fn comp_expr(i: &str) -> IResult<&str, BoolExpr> {
         space0,
         alphanumeric,
         space0,
-        is_not(" \t\r\nabcdefghijklmnopqrstuvwxyz"),
+        is_not(" \t\r\nabcdefghijklmnopqrstuvwxyz1234567890"),
         space0,
         alphanumeric,
         space0,
@@ -129,13 +122,6 @@ fn comp_expr(i: &str) -> IResult<&str, BoolExpr> {
 }
 
 fn main() {
-    match bool_expr("d=1 and a1 >=b or a= 1 and c > 832 ") {
-        Ok((s, expr)) => {
-            println!("{:#?}", s);
-            println!("{:#?}", expr);
-        }
-        Err(e) => println!("{:#?}", e),
-    }
 
     match bool_expr(" d= 1 and a1 >=b or a= 1 and c > 832 ") {
         Ok((s, expr)) => {
@@ -146,6 +132,30 @@ fn main() {
     }
 
     match bool_expr("x= 1 and d= 1 and a1 >=b or a= 1 and c > 832 ") {
+        Ok((s, expr)) => {
+            println!("{:#?}", s);
+            println!("{:#?}", expr);
+        }
+        Err(e) => println!("{:#?}", e),
+    }
+
+    match bool_expr("d=1 and a1 >=b or a= 1 and c > 832 ") {
+        Ok((s, expr)) => {
+            println!("{:#?}", s);
+            println!("{:#?}", expr);
+        }
+        Err(e) => println!("{:#?}", e),
+    }
+
+    match bool_expr("d=1 and (a1 >=b or a= 1) and c > 832 ") {
+        Ok((s, expr)) => {
+            println!("{:#?}", s);
+            println!("{:#?}", expr);
+        }
+        Err(e) => println!("{:#?}", e),
+    }
+
+    match bool_expr("a = 1 and b = 2 and c = 3") {
         Ok((s, expr)) => {
             println!("{:#?}", s);
             println!("{:#?}", expr);
