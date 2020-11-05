@@ -1,0 +1,10 @@
+[package]
+name = "bool_parser_assoc"
+version = "0.1.0"
+authors = ["褚晖 <chuhui.cch@antgroup.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+nom = "6.0.0"
